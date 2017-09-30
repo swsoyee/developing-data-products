@@ -46,6 +46,7 @@ myMap <- leaflet() %>%
 # Show the map
 myMap
 ```
+
 ## 4. Adding marker
 I want to make a map of where I have been to, so I use the ggmap package for getting longitude/latitude of every city.
 ```{r}
@@ -60,6 +61,7 @@ myMap <- myMap %>%
            popup = myLocation$address)
 myMap
 ```
+
 ## 5. Adding many markers
 ```{r}
 countries <- c("china","australia","japan")
@@ -69,8 +71,8 @@ myLocations %>%
   addTiles() %>%
   addMarkers(popup = myLocations$address)
 ```
-## 6. Mapping Clusters
 
+## 6. Mapping Clusters
 Hide the  details of `cities`.
 ```{r echo=FALSE}
 cities <- c("behai shi",
