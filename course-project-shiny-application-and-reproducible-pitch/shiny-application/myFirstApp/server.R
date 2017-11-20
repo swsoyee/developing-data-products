@@ -1,26 +1,40 @@
-#
-# This is the server logic of a Shiny web application. You can run the 
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
 library(plotly)
+library(data.table)
 
-# Define server logic required to draw a histogram
 shinyServer(function(input, output) {
    
-  output$distPlot <- renderPlotly({
+
+    source("language.R",local = TRUE, encoding="utf-8")
     
-    p <- plot_ly(data = iris, 
-                    x = ~Sepal.Length, 
-                    y = ~Sepal.Width,
-                color = ~Species, 
-                alpha = ~input$alpha,
-                 type = "scatter")
-  })
-  
+    output$distPlot <- renderPlotly({
+        p <- plot_ly(data = iris, 
+                     x = iris[ ,input$xAxis], 
+                     y = iris[ ,input$yAxis],
+                     color = ~Species, 
+                     alpha = ~input$alpha,
+                     type = "scatter",
+                     mode = "markers")
+    })
+    
+    output$boxPlot <- renderPlotly({
+        p <- plot_ly(data = iris,
+                     x = ~Species,
+                     y = iris[ ,input$xAxis],
+                     color = ~Species,
+                     type = "box")
+        
+    })
+    
+    summaryOutput <- reactive({
+        data.table(iris)
+    })
+    
+    output$summaryOutput <- DT::renderDataTable({
+        DT::datatable(summaryOutput())
+    })
+    
+    output$lGlobalSetting <- renderUI({
+        titlePanel(tr("lGlobalSetting"))
+    })
 })
